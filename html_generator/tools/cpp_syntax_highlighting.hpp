@@ -41,21 +41,24 @@ token find_next_token(RandomAccessIterator begin, RandomAccessIterator end)
 	// Detecting identifier and namespaces
 	if (isalnum(*begin) || *begin == ':')
 	{
-		short colon_count = (short) (*begin == ':' ? 1 : 0);
-		std::string content = std::string(begin, std::find_if(begin + 1, end,
-															  [&](char c)
-															  {
-																  if(c == ':'){
-																	  colon_count = (short) ((colon_count + 1) % 4 + 2);
-																  }
-																  return !isalnum(c) &&
-																		 c != '_' && c != ':';
-															  }));
-		if(colon_count % 2 == 1){
+		short colon_count = (short)(*begin == ':' ? 1 : 0);
+		std::string content = std::string(
+		    begin, std::find_if(begin + 1, end, [&](char c)
+		                        {
+			                        if (c == ':')
+			                        {
+				                        colon_count =
+				                            (short)((colon_count + 1) % 4 + 2);
+			                        }
+			                        return !isalnum(c) && c != '_' && c != ':';
+			                    }));
+		if (colon_count % 2 == 1)
+		{
 			// Wrong number of colons
 			return {content, token_type::other};
 		}
-		if(colon_count == 2){
+		if (colon_count == 2)
+		{
 			return {content, token_type::double_colon};
 		}
 		return {content, token_type::identifier};
@@ -108,7 +111,7 @@ token find_next_token(RandomAccessIterator begin, RandomAccessIterator end)
 		                                        [](char c)
 		                                        {
 			                                        return is_line_end(c) ||
-			                                               c == '"';
+			                                               c == '"' || c == '<';
 			                                    })),
 		        token_type::preprocessor};
 	}
@@ -237,14 +240,14 @@ inline auto render_code_raw(std::string code)
 					                   .generate(sink);
 					               break;
 				               }
-							   text(t.content).generate(sink);
-							   break;
+				               text(t.content).generate(sink);
+				               break;
 
 			               case token_type::double_colon:
-							   tags::span(attribute("class", "names"),
-										  text(t.content))
-									   .generate(sink);
-								   break;
+				               tags::span(attribute("class", "names"),
+				                          text(t.content))
+				                   .generate(sink);
+				               break;
 
 			               case token_type::space:
 			               case token_type::other:

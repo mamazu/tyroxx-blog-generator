@@ -60,16 +60,14 @@ BOOST_AUTO_TEST_CASE(render_code_raw_keyword)
 
 BOOST_AUTO_TEST_CASE(render_code_raw_scoped_identifier)
 {
-	check_code_rendering(
-	    "scope::identifier",
-	    R"(<span class="names">scope::identifier</span>)");
+	check_code_rendering("scope::identifier",
+	                     R"(<span class="names">scope::identifier</span>)");
 }
 
 BOOST_AUTO_TEST_CASE(render_code_raw_global_scoped_identifier)
 {
-	check_code_rendering(
-	    "::scope::identifier",
-	    R"(<span class="names">::scope::identifier</span>)");
+	check_code_rendering("::scope::identifier",
+	                     R"(<span class="names">::scope::identifier</span>)");
 }
 
 BOOST_AUTO_TEST_CASE(render_code_raw_space)
@@ -134,7 +132,7 @@ BOOST_AUTO_TEST_CASE(render_code_raw_include)
 {
 	check_code_rendering(
 	    "#include <vector>\n",
-	    "<span class=\"preprocessor\">#include &lt;vector&gt;</span>\n");
+	    "<span class=\"preprocessor\">#include </span>&lt;vector&gt;\n");
 }
 
 BOOST_AUTO_TEST_CASE(render_an_empty_comment)
